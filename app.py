@@ -3,29 +3,39 @@ import time
 from src.utils import generate_audio_by_prompt, get_audio_information
 
 
-def generate_song(description):
-    # data = generate_audio_by_prompt(
-    #     {"prompt": description, "make_instrumental": False, "wait_audio": False}
-    # )
-    # print("data=", data)
-    data = True
+def generate_song(description=""):
+
+    data = [
+        {"id": "388d5922-47b9-43b7-beba-386ec859dcbc"},
+        {"id": "2b243407-be62-491c-be50-d39da00869e9"},
+    ]
+    if description:
+        data = generate_audio_by_prompt(
+            {"prompt": description, "make_instrumental": False, "wait_audio": False}
+        )
+    else:
+        print("no description given. Using defaults")
+
+    print("data=", data)
 
     audio_urls = []
     songs = []
     if data:
-        # audio_ids = ",".join([str(item["id"]) for item in data])
 
-        audio_ids = [
-            "137cf652-03e9-4064-8b02-fe31bffa308a",
-            "c80ef39d-7276-4b97-9377-e70d4e93e3e7",
-        ]
-        audio_ids = ",".join(audio_ids)
+        audio_ids = ",".join([str(item["id"]) for item in data])
+
         print("Audio Ids = ", audio_ids)
 
         for _ in range(60):
             data = get_audio_information(audio_ids)
             print("data = ", data)
+
+            # todo: overwrite this each time using session state
+            with st.expander("Audio Information", expanded=False):
+                st.write(data[0])
+                st.code(data[0]["lyric"])
             if data[0]["status"] == "streaming" or data[0]["status"] == "complete":
+                # if data[1]["status"] == "streaming":
                 audio_urls.append(data[0]["audio_url"])
                 audio_urls.append(data[1]["audio_url"])
                 songs.append(
@@ -35,6 +45,8 @@ def generate_song(description):
                         "image_url": data[0]["image_url"],
                         "lyric": data[0]["lyric"],
                         "audio_url": data[0]["audio_url"],
+                        "video_url": data[0]["video_url"],
+                        "tags": data[0]["tags"],
                     }
                 )
 
@@ -45,6 +57,8 @@ def generate_song(description):
                         "image_url": data[1]["image_url"],
                         "lyric": data[1]["lyric"],
                         "audio_url": data[1]["audio_url"],
+                        "video_url": data[1]["video_url"],
+                        "tags": data[1]["tags"],
                     }
                 )
 
@@ -57,10 +71,6 @@ def generate_song(description):
         print("\n\n\nsong generated: \n")
         print(songs)
 
-        # audio_info = get_audio_information(audio_ids)
-        # print("Audio Info = ", audio_info)
-
-        # Display audio widgets
         for song in songs:
             col1, col2 = st.columns([1, 4])
             with col1:
@@ -70,6 +80,7 @@ def generate_song(description):
                 st.text(f"Song generated on {time.strftime('%Y-%m-%d %H:%M:%S')}")
             st.code(song["lyric"])
             st.audio(song["audio_url"])
+            st.markdown(f"[View Video](https://cdn1.suno.ai/{song['id']}.mp4)")
 
 
 def main():
