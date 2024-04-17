@@ -1,8 +1,10 @@
-import time
+import os
 import requests
+from dotenv import load_dotenv
 
-# replace your vercel domain
-base_url = "https://suno-api-livid.vercel.app"
+load_dotenv()
+
+base_url = os.getenv("SUNO_BASE_URL")
 
 
 def custom_generate_audio(payload):
