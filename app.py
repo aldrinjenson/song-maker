@@ -1,10 +1,12 @@
 import streamlit as st
 import time
 from src.utils import generate_audio_by_prompt, get_audio_information
+from src.misc import generate_qr
 
 
 def generate_song(description=""):
 
+    # default song ids. gpt wizards theme song :)
     data = [
         {"id": "388d5922-47b9-43b7-beba-386ec859dcbc"},
         {"id": "2b243407-be62-491c-be50-d39da00869e9"},
@@ -38,31 +40,29 @@ def generate_song(description=""):
                 # if data[1]["status"] == "streaming":
                 audio_urls.append(data[0]["audio_url"])
                 audio_urls.append(data[1]["audio_url"])
-                songs.append(
-                    {
-                        "id": data[0]["id"],
-                        "title": data[0]["title"],
-                        "image_url": data[0]["image_url"],
-                        "lyric": data[0]["lyric"],
-                        "audio_url": data[0]["audio_url"],
-                        "video_url": data[0]["video_url"],
-                        "tags": data[0]["tags"],
-                    }
+                songs.extend(
+                    [
+                        {
+                            "id": data[0]["id"],
+                            "title": data[0]["title"],
+                            "image_url": data[0]["image_url"],
+                            "lyric": data[0]["lyric"],
+                            "audio_url": data[0]["audio_url"],
+                            "video_url": data[0]["video_url"],
+                            "tags": data[0]["tags"],
+                        },
+                        {
+                            "id": data[1]["id"],
+                            "title": data[1]["title"],
+                            "image_url": data[1]["image_url"],
+                            "lyric": data[1]["lyric"],
+                            "audio_url": data[1]["audio_url"],
+                            "video_url": data[1]["video_url"],
+                            "tags": data[1]["tags"],
+                        },
+                    ]
                 )
 
-                songs.append(
-                    {
-                        "id": data[1]["id"],
-                        "title": data[1]["title"],
-                        "image_url": data[1]["image_url"],
-                        "lyric": data[1]["lyric"],
-                        "audio_url": data[1]["audio_url"],
-                        "video_url": data[1]["video_url"],
-                        "tags": data[1]["tags"],
-                    }
-                )
-
-                # audio_lyrics.append(data[0]["lyrics"], data[1]["lyrics"])
                 print(f"{data[0]['id']} ==> {data[0]['audio_url']}")
                 print(f"{data[1]['id']} ==> {data[1]['audio_url']}")
                 break
@@ -80,16 +80,19 @@ def generate_song(description=""):
                 st.text(f"Song generated on {time.strftime('%Y-%m-%d %H:%M:%S')}")
             st.code(song["lyric"])
             st.audio(song["audio_url"])
-            st.markdown(f"[View Video](https://cdn1.suno.ai/{song['id']}.mp4)")
+
+            song_video_url = f"https://cdn1.suno.ai/{song['id']}.mp4"
+            qr_img = generate_qr(song_video_url)
+
+            st.markdown(f"[View Video]({song_video_url})")
+            with st.expander("Download by QR", expanded=False):
+                st.image(qr_img, caption="QR Code", use_column_width=True)
 
 
 def main():
     st.title("AI Music Generator")
-
-    # User input for description
     description = st.text_area("Enter a description for the song", height=100)
 
-    # Button to generate the song
     if st.button("Generate Song"):
         generate_song(description)
 
