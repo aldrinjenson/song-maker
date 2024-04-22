@@ -3,13 +3,21 @@ import time
 from src.utils import generate_audio_by_prompt, get_audio_information
 from src.misc import generate_qr
 
+st.set_page_config(
+    page_title="Song-Maker",
+    page_icon="🎸",
+)
+
 
 def generate_song(description=""):
+    print("description = ", description)
 
     # default song ids. gpt wizards theme song :)
     data = [
-        {"id": "388d5922-47b9-43b7-beba-386ec859dcbc"},
-        {"id": "2b243407-be62-491c-be50-d39da00869e9"},
+        {"id": "975af32f-903d-47bb-a6e2-35feddcb7d4b"},
+        {"id": "07155c44-e8b1-4c6d-97c3-9d5780c506f4"},
+        # {"id": "388d5922-47b9-43b7-beba-386ec859dcbc"},
+        # {"id": "2b243407-be62-491c-be50-d39da00869e9"},
     ]
     if description:
         data = generate_audio_by_prompt(
@@ -45,7 +53,8 @@ def generate_song(description=""):
                         {
                             "id": data[0]["id"],
                             "title": data[0]["title"],
-                            "image_url": data[0]["image_url"],
+                            "image_url": data[0]["image_url"]
+                            or "https://placehold.co/600x400?text=No+preview+image",
                             "lyric": data[0]["lyric"],
                             "audio_url": data[0]["audio_url"],
                             "video_url": data[0]["video_url"],
@@ -54,7 +63,8 @@ def generate_song(description=""):
                         {
                             "id": data[1]["id"],
                             "title": data[1]["title"],
-                            "image_url": data[1]["image_url"],
+                            "image_url": data[1]["image_url"]
+                            or "https://placehold.co/600x400?text=No+preview+image",
                             "lyric": data[1]["lyric"],
                             "audio_url": data[1]["audio_url"],
                             "video_url": data[1]["video_url"],
