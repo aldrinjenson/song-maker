@@ -14,10 +14,8 @@ def generate_song(description=""):
 
     # default song ids. gpt wizards theme song :)
     data = [
-        {"id": "975af32f-903d-47bb-a6e2-35feddcb7d4b"},
-        {"id": "07155c44-e8b1-4c6d-97c3-9d5780c506f4"},
-        # {"id": "388d5922-47b9-43b7-beba-386ec859dcbc"},
-        # {"id": "2b243407-be62-491c-be50-d39da00869e9"},
+        {"id": "388d5922-47b9-43b7-beba-386ec859dcbc"},
+        {"id": "2b243407-be62-491c-be50-d39da00869e9"},
     ]
     if description:
         data = generate_audio_by_prompt(
