@@ -4,7 +4,7 @@ from src.utils import generate_audio_by_prompt, get_audio_information
 from src.misc import generate_qr
 
 st.set_page_config(
-    page_title="Song-Maker",
+    page_title="Echoes of AI",
     page_icon="🎸",
 )
 
@@ -98,7 +98,7 @@ def generate_song(description=""):
 
 
 def main():
-    st.title("AI Music Generator")
+    st.title("Echoes of AI")
     description = st.text_area("Enter a description for the song", height=100)
 
     if st.button("Generate Song"):
