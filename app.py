@@ -99,7 +99,8 @@ def generate_song(description=""):
 
 def main():
     st.title("Echoes of AI")
-    description = st.text_area("Enter a description for the song", height=100)
+    st.write("Powered by Suno.AI")
+    description = st.text_area("Enter a description for a song", height=100)
 
     if st.button("Generate Song"):
         generate_song(description)

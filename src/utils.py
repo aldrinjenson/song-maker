@@ -20,6 +20,7 @@ def generate_audio_by_prompt(payload):
     response = requests.post(
         url, json=payload, headers={"Content-Type": "application/json"}
     )
+    # print("response = ", response)
     return response.json()
 
 
